@@ -8,7 +8,6 @@ app = Flask(__name__)
 
 
 def on_connect(tag):
-    # print(tag)
     if tag and tag.TYPE == "Type3Tag":
         id_info = binascii.hexlify(tag.idm).decode().upper()
     elif tag and tag.TYPE == "Type2Tag":
