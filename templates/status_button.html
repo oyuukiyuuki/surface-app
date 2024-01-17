@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+        <link href="https://fonts.googleapis.com/earlyaccess/hannari.css" rel="stylesheet">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>時間記録</title>
+      </head>
+      <script>
+        function submitForm(status) {
+            var id = '{{ nfc_id }}';
+            // 送信するJSONデータ
+            const jsonData = {
+                nfc_id: id,
+                status: status
+                // 他のキーと値を必要に応じて追加
+            };
+
+            // 送信先のURL
+            // const url = 'https://tkee-3250ca1a803d.herokuapp.com/regist_time';
+            const url = 'http://127.0.0.1:5000/regist_time';
+
+
+            // XMLHttpRequestオブジェクトを作成
+            const xhr = new XMLHttpRequest();
+
+            // POSTメソッドでリクエストを送信
+            xhr.open('POST', url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+
+            // リクエストが完了した際の処理
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    window.location.href = 'http://127.0.0.1:5500/';
+                } else {
+                    var errorMessage;
+                    try {
+                        errorMessage = JSON.parse(xhr.responseText).message;
+                    } catch (e) {
+                        errorMessage = 'エラーが発生しました。';
+                    }
+                    alert('error: ' + errorMessage);
+                    window.location.href = 'http://127.0.0.1:5500/';
+                }
+            };
+
+            // エラーハンドリング（新たに追加）
+            xhr.onerror = function () {
+                alert('ネットワークエラーが発生しました');
+                window.location.href = 'http://127.0.0.1:5500/';
+            };            
+
+            // リクエストを送信
+            xhr.send(JSON.stringify(jsonData));
+            }    
+</script>
+      <style>
+        .btn-border {
+            border-radius: 50%;
+            border: 10px solid black;
+            background: transparent;
+            color: black;
+            width: 200px;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            margin: 10px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease; /* 色の変化をスムーズにする */
+            font-size: 40px;
+
+          }
+        .btn-border:hover{
+            background-color: rgb(220, 222, 223)
+        }
+
+        .hannari{
+            font-family: "Hannari";
+        }
+        </style>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Fifth navbar example">
+        <div class="container-fluid">
+          <a class="navbar-brand">高橋研入退室管理システム</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+    
+          </div>
+        </div>
+    </nav>
+        <div class="row mt-5 justify-content-center pt-5">
+            <div class="col-sm-2 mb-3 mb-sm-0">
+                <button type="button" class="btn-border" onclick="submitForm(0)">在室</button>
+            </div>
+            <div class="col-sm-2 mb-3 mb-sm-0">
+                <button type="button" class="btn-border" onclick="submitForm(1)">ゼミ</button>
+            </div>
+            <div class="col-sm-2 mb-3 mb-sm-0">
+                <button type="button" class="btn-border" onclick="submitForm(2)">講義</button>
+            </div>
+            <div class="col-sm-2 mb-3 mb-sm-0">
+                <button type="button" class="btn-border" onclick="submitForm(3)">会議</button>
+            </div>
+        </div>
+        <div class="row mt-5 justify-content-center" >
+            <div class="col-sm-2 mb-3 mb-sm-0">
+                <button type="button" class="btn-border" onclick="submitForm(4)">外出</button>
+            </div>
+            <div class="col-sm-2 mb-3 mb-sm-0">
+                <button type="button" class="btn-border" onclick="submitForm(5)">出張</button>
+            </div>
+            <div class="col-sm-2 mb-3 mb-sm-0">
+                <button type="button" class="btn-border " onclick="submitForm(6)">帰宅</button>
+            </div>
+        </div>
+
+
+
+    <!-- <h1>User Registration</h1>
+    <form id="registrationForm">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+
+        <label for="grade">Grade:</label>
+        <input type="text" id="grade" name="grade" required><br>
+
+        <button type="button" onclick="submitForm()">Register</button>
+    </form> -->
+    <!-- <h1><textarea id="response" cols=120 rows=10 disabled></textarea></h1> -->
+
+    <footer id="footer" class="footer text-center pt-2 bg-dark fixed-bottom">
+        <div class="container">
+          <div class="row">
+            <div class="col text-white">
+              <p>Copyright @ 2024 高橋研究室</p>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+</body>
+</html>
