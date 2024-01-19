@@ -31,15 +31,26 @@ def register():
 @app.route("/nfc_info")
 def get_nfc_info():
     while True:
+        flag = True
+        print("カードをかざしてください:")
         try:
             clf = nfc.ContactlessFrontend("usb")
-            tag_info = clf.connect(rdwr={"on-connect": on_connect})
-            id_info = binascii.hexlify(tag_info.identifier).decode().upper()
+            tag = clf.connect(rdwr={"on-connect": lambda tag: False})
+            clf.close()
+            # ICカードのID情報抽出して表示する
+            if tag and tag.TYPE == "Type3Tag":
+                id_info = binascii.hexlify(tag.idm).decode().upper()
+            elif tag and tag.TYPE == "Type2Tag":
+                id_info = binascii.hexlify(tag.identifier).decode().upper()
+            elif tag and tag.TYPE == "Type4Tag":
+                id_info = binascii.hexlify(tag.identifier).decode().upper()
+            else:
+                id_info = None
         except Exception as e:
-            id_info = "error"
-        clf.close()
-        if id_info != "error":
+            flag = False
+        if flag and not (id_info is None):
             break
+
     print(id_info)
     return id_info
 
